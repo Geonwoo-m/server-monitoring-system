@@ -26,7 +26,7 @@
 -가상 머신 기반 Fedora Linux 서버 환경에서 OpenJDK를 설치하여 Java 개발 환경을 구축하고, 서버 모니터링을 위한 Java 소스 코드를 작성하였다. 
 -현재 단계에서는 기능 분리보다는 전체 동작 확인을 우선으로 하여, Linux 서버 환경에서 CPU 점유율과 메모리 사용량을 웹 페이지를 통해 확인할 수 있도록 구현하였다.
 
-SimpleMonitor.java ->  리눅스 서버의 CPU·메모리 사용률을 5초마다 출력
+SimpleMonitor.java ->  리눅스 서버의 CPU·메모리 사용률을 5초마다 출력<br>
 SimpleHttpServer.java -> 리눅스 서버의 CPU·메모리 상태를 HTTP 서버 형태로 외부에 제공 | 사용법: 리눅스 터미널에서 hostname -I 명령어로 IP주소를 가져오고  http://가져온주소:8080/status로 외부 접속가능
 
 
