@@ -21,13 +21,54 @@
 - 웹 대시보드를 통한 시각화
 
 
-#2025/12/17
+# Server Monitoring System
 
--가상 머신 기반 Fedora Linux 서버 환경에서 OpenJDK를 설치하여 Java 개발 환경을 구축하고, 서버 모니터링을 위한 Java 소스 코드를 작성하였다. <br>
--현재 단계에서는 기능 분리보다는 전체 동작 확인을 우선으로 하여, Linux 서버 환경에서 CPU 점유율과 메모리 사용량을 웹 페이지를 통해 확인할 수 있도록 구현하였다.<br>
+## 진행 기록
+**2025/12/17**
 
-SimpleMonitor.java ->  리눅스 서버의 CPU·메모리 사용률을 5초마다 출력<br>
-SimpleHttpServer.java -> 리눅스 서버의 CPU·메모리 상태를 HTTP 서버 형태로 외부에 제공 | 사용법: 리눅스 터미널에서 hostname -I 명령어로 IP주소를 가져오고  http://가져온주소:8080/status로 외부 접속가능
+- 가상 머신 기반 Fedora Linux 서버 환경에서 OpenJDK를 설치하여  
+  Java 개발 환경을 구축하고, 서버 모니터링을 위한 Java 소스 코드를 작성하였다.
+
+- 현재 단계에서는 기능 분리보다는 전체 동작 확인을 우선으로 하여,  
+  Linux 서버 환경에서 CPU 점유율과 메모리 사용량을  
+  웹 페이지를 통해 확인할 수 있도록 구현하였다.
+
+---
+
+## 구현 파일 설명
+
+### SimpleMonitor.java
+- 리눅스 서버의 CPU 사용률과 메모리 사용량을  
+  **5초 주기**로 터미널에 출력하는 프로그램
+- 시스템 자원 사용 현황을 실시간으로 확인하기 위한  
+  기본 모니터링 기능을 담당
+
+---
+
+### SimpleHttpServer.java
+- 리눅스 서버의 CPU 및 메모리 상태를  
+  **HTTP 서버 형태로 외부에 제공**하는 프로그램
+- Java 내장 HTTP 서버를 사용하여  
+  별도의 웹 서버 프레임워크 없이 구현
+
+#### 사용 방법
+1. 리눅스 서버 터미널에서 IP 주소 확인 후 컴파일 및 실행
+   ```bash
+   hostname -I
+   javac -SimpleHttpServer.java
+   java -SimpleHttpServer.java
+2. 웹 브라우저(외부 PC)에서 아래 주소로 접속
+
+   http://[서버 IP 주소]:8080/status
+
+
+### 웹 페이지에서 서버 상태 확인
+![웹 페이지 실행 결과](screenshots/2.png)
+
+### 터미널에서 CPU 및 메모리 모니터링
+![터미널 실행 결과](screenshots/1.png)
+
+
 
 
 
