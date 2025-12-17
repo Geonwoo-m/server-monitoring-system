@@ -67,9 +67,11 @@
 
 <br><br>
 
-# Python과 Java를 결합하여 작동하게 변경 #
+<span style="color:red; font-size:30px">위에 작업한 내용 삭제하고 다시 작업 </span>
 
-<br> <br>
+**Python과 Java를 결합하여 작동하게 변경**
+
+
 
 
 ## Why..? 아래의 이유로 변경하였음.. ##
@@ -85,7 +87,8 @@
 
 
 
----
+
+
 
 #### 사용 방법 (Usage)
 
