@@ -21,7 +21,6 @@
 - 웹 대시보드를 통한 시각화
 
 
-# Server Monitoring System
 
 ## 진행 기록
 **2025/12/17**
