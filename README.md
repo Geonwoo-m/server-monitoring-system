@@ -62,10 +62,10 @@
 
 
 ### 웹 페이지에서 서버 상태 확인
-![웹 페이지 실행 결과](screenshots/2.png)
+![웹 페이지 실행 결과](Screenshots/2.png)
 
 ### 터미널에서 CPU 및 메모리 모니터링
-![터미널 실행 결과](screenshots/1.png)
+![터미널 실행 결과](Screenshots/1.png)
 
 
 
