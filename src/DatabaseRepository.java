@@ -1,11 +1,24 @@
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Properties;
 public class DatabaseRepository {
-    private static final String URL = "jdbc:mysql://localhost:3306/monitoring_db";
-    private static final String USER = "root";
-    private static final String PW = "1234";
+
+    private static final Properties prop = new Properties();
+    static {
+        try (FileInputStream fis = new FileInputStream("db.properties")) {
+            prop.load(fis);
+        } catch (IOException e) {
+            System.err.println("설정 파일을 찾을 수 없습니다: db.properties");
+            e.printStackTrace();
+        }
+    }
+
+    private static final String URL = prop.getProperty("db.url");
+    private static final String USER = prop.getProperty("db.user");
+    private static final String PW = prop.getProperty("db.password");
 
     public void save(double cpu, double memory) {
         String sql = "INSERT INTO system_metrics (cpu_usage, memory_usage) VALUES (?, ?)";
