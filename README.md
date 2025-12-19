@@ -114,53 +114,63 @@
 
 
 
-**2025/12/19 진행기록** 
-<br>
+# 📊 실시간 멀티 서버 리소스 모니터링 시스템
+> **2025/12/19 진행 기록**
+
 ## 📂 파일별 역할 (File Responsibilities)
 
-프로젝트의 각 구성 요소는 다음과 같은 명확한 역할을 수행합니다.
-
-###  Python Agent
+### 🐍 Python Agent
 * **`agent.py`**: 
     - 리눅스 시스템의 `psutil` 라이브러리를 사용하여 자원 정보를 추출합니다.
-    - 수집된 데이터를 자바 서버의 API 엔드포인트로 전송하는 송신자 역할을 합니다.
+    - **에이전트 식별자(`agent_name`)**를 포함한 데이터를 JSON 형식으로 전송합니다.
 
-###  Java Server (Back-end)
-* **`Metric.java`**: **DTO**
-    - CPU 사용량, 메모리 사용량, 수집 시간 등 데이터를 규격화하여 담는 객체입니다.
-* **`DatabaseRepository.java`**: **DAO**
-    - 데이터베이스(MySQL)와 직접 연결됩니다.
-    - 데이터를 테이블에 저장(`save`)하거나, 화면 출력을 위해 최신 데이터를 조회(`findAll`)합니다.
-* **`MonitoringServer.java`**: **Controller/Server**
-    - 파이썬 에이전트가 보낸 HTTP 요청을 수신합니다.
-    - 수신된 데이터를 파싱하여 `DatabaseRepository`를 통해 DB에 기록합니다.
-* **`MonitoringView.java`**: **View**
-    - 저장된 데이터를 웹 브라우저에 HTML 표(Table) 형태로 출력합니다.
-    - 사용자에게 시스템의 현재 상태를 시각적으로 보여줍니다.
+### ☕ Java Server (Back-end)
+* **`Metric.java` (DTO)**: 
+    - 데이터를 규격화하여 담는 객체로, 어떤 서버에서 온 데이터인지 구분하기 위한 `agentName` 필드를 포함합니다.
+* **`DatabaseRepository.java` (DAO)**: 
+    - JDBC를 통해 MySQL과 연결되며, 서버별 식별자를 포함하여 데이터를 저장(`save`)하고 조회(`findAll`)합니다.
+* **`MonitoringServer.java` (Controller)**: 
+    - 외부 라이브러리(`org.json`)를 사용하여 수신된 JSON 데이터를 파싱하고 로직을 제어합니다.
+* **`MonitoringView.java` (View)**: 
+    - 저장된 데이터를 웹 브라우저에 출력하며, Chart.js를 통해 실시간 그래프를 렌더링합니다.
 
 ---
 
 ## 🔄 데이터 흐름 (Data Flow)
 
 
-1. **수집**: `agent.py`가 리눅스 자원 수집 후 서버로 전송
-2. **수신/저장**: `MonitoringServer`가 수신 후 `DatabaseRepository`를 통해 DB 저장
-3. **조회**: 사용자가 접속 시 `MonitoringView`가 DB 데이터를 꺼내 화면에 출력
-### 실행화면 
-![웹 페이지 실행 결과](Screenshots/web_page.png)
+
+1. **수집**: `agent.py`가 리눅스 자원 수집 및 JSON 패키징 후 서버로 전송
+2. **수신/저장**: `MonitoringServer`가 JSON 파싱 후 `DatabaseRepository`를 통해 DB 저장
+3. **조회**: 사용자가 접속 시 `MonitoringView`가 DB 데이터를 꺼내 서버별로 화면에 출력
+
 ---
 
-## 추가 수정 ##
-### 1. 데이터베이스 보안 강화 (Security)
-* **설정 파일 분리**: DB 접속 정보를 `db.properties`로 외부화하여 소스 코드 노출을 방지했습니다.
-* **Git ignore**: `.gitignore` 설정을 통해 민감한 보안 정보가 GitHub 저장소에 업로드되지 않도록 관리합니다.
+## ✨ 주요 업데이트 및 개선 사항
 
-### 2. 실시간 시각화 대시보드 (Visualization)
-* **Chart.js 통합**: 최근 수집된 데이터를 바탕으로 실시간 추이를 확인할 수 있는 **꺾은선 그래프(Line Chart)**를 제공합니다.
-* **상태 판별 로직**: 최근 10회 평균 CPU 사용량을 계산하여 서버 상태를 자동 판별합니다.
-  - 🟢 **정상**: 40% 미만
-  - 🟡 **주의**: 40% ~ 70%
-  - 🔴 **위험**: 70% 이상
+### 1. 멀티 에이전트 식별 및 확장성 (Scalability)
+* **에이전트 고유 식별**: 각 에이전트마다 `agent_name`을 부여하여, 하나의 중앙 서버에서 다수의 서버(예: Fedora, Windows, Seoul-01 등)를 통합 관리할 수 있습니다.
+* **유연한 확장**: 서버 코드 수정 없이 새로운 에이전트를 실행하는 것만으로 모니터링 대상을 즉시 추가할 수 있습니다.
+
+### 2. JSON 기반 데이터 표준화 (Standardization)
+* **표준 프로토콜**: 단순 문자열 파싱(`split`)에서 벗어나 표준 데이터 포맷인 **JSON**을 채택하여 통신 안정성을 높였습니다.
+* **라이브러리 통합**: `json-20231013.jar`를 사용하여 복잡한 데이터 구조도 명확하게 처리합니다.
+
+### 3. 실시간 시각화 및 보안 (Visualization & Security)
+* **Chart.js 대시보드**: 꺾은선 그래프를 통해 CPU/Memory 변화 추이를 시각화합니다.
+* **보안 강화**: `db.properties`를 통한 설정 분리 및 `.gitignore`를 활용한 민감 정보 노출 방지.
+* **상태 판별**: 최근 10회 평균 CPU 사용량을 기준으로 **정상(🟢), 주의(🟡), 위험(🔴)** 상태를 자동 표시합니다.
+
+---
+
+## 📊 데이터 통신 규격 (JSON Example)
+에이전트는 서버로 다음과 같은 표준 규격의 데이터를 전송합니다.
+```json
+{
+  "agent_name": "Fedora-Server-01",
+  "cpu": 24.5,
+  "memory": 58.2
+}
 
 ### 실행화면 
 ![웹 페이지 실행 결과](Screenshots/graph.png)
