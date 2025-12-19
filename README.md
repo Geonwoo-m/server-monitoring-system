@@ -107,9 +107,49 @@
 
 ### 터미널에서 CPU 및 메모리 모니터링
 ![터미널 실행 결과](Screenshots/4.png)
+<br>
+<br>
+<br>
 
 
 
 
+**2025/12/19 진행기록** 
+<br>
+## 📂 파일별 역할 (File Responsibilities)
+
+프로젝트의 각 구성 요소는 다음과 같은 명확한 역할을 수행합니다.
+
+###  Python Agent
+* **`agent.py`**: 
+    - 리눅스 시스템의 `psutil` 라이브러리를 사용하여 자원 정보를 추출합니다.
+    - 수집된 데이터를 자바 서버의 API 엔드포인트로 전송하는 송신자 역할을 합니다.
+
+###  Java Server (Back-end)
+* **`Metric.java`**: **DTO**
+    - CPU 사용량, 메모리 사용량, 수집 시간 등 데이터를 규격화하여 담는 객체입니다.
+* **`DatabaseRepository.java`**: **DAO**
+    - 데이터베이스(MySQL)와 직접 연결됩니다.
+    - 데이터를 테이블에 저장(`save`)하거나, 화면 출력을 위해 최신 데이터를 조회(`findAll`)합니다.
+* **`MonitoringServer.java`**: **Controller/Server**
+    - 파이썬 에이전트가 보낸 HTTP 요청을 수신합니다.
+    - 수신된 데이터를 파싱하여 `DatabaseRepository`를 통해 DB에 기록합니다.
+* **`MonitoringView.java`**: **View**
+    - 저장된 데이터를 웹 브라우저에 HTML 표(Table) 형태로 출력합니다.
+    - 사용자에게 시스템의 현재 상태를 시각적으로 보여줍니다.
+
+---
+
+## 🔄 데이터 흐름 (Data Flow)
 
 
+1. **수집**: `agent.py`가 리눅스 자원 수집 후 서버로 전송
+2. **수신/저장**: `MonitoringServer`가 수신 후 `DatabaseRepository`를 통해 DB 저장
+3. **조회**: 사용자가 접속 시 `MonitoringView`가 DB 데이터를 꺼내 화면에 출력
+
+---
+
+
+
+### 실행화면 
+![웹 페이지 실행 결과](Screenshots/web_page.png)
