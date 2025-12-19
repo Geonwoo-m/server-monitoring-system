@@ -54,4 +54,17 @@ public class DatabaseRepository {
 
        return metrics;
     }
+
+    public double getTodayMaxCpu(){
+        String sql = "SELECT MAX(cpu_usage) FROM system_metrics WHERE DATE(record_at) = CURDATE()";
+        try(Connection conn = DriverManager.getConnection(URL,USER,PW);
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        ResultSet rs = pstmt.executeQuery()){
+            if(rs.next())
+                return rs.getDouble(1);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return 0.0;
+    }
 }
