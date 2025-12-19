@@ -146,7 +146,8 @@
 1. **수집**: `agent.py`가 리눅스 자원 수집 후 서버로 전송
 2. **수신/저장**: `MonitoringServer`가 수신 후 `DatabaseRepository`를 통해 DB 저장
 3. **조회**: 사용자가 접속 시 `MonitoringView`가 DB 데이터를 꺼내 화면에 출력
-
+### 실행화면 
+![웹 페이지 실행 결과](Screenshots/web_page.png)
 ---
 
 ## 추가 수정 ##
@@ -166,5 +167,4 @@
 
 
 
-### 실행화면 
-![웹 페이지 실행 결과](Screenshots/web_page.png)
+
