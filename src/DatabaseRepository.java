@@ -20,12 +20,13 @@ public class DatabaseRepository {
     private static final String USER = prop.getProperty("db.user");
     private static final String PW = prop.getProperty("db.password");
 
-    public void save(double cpu, double memory) {
-        String sql = "INSERT INTO system_metrics (cpu_usage, memory_usage) VALUES (?, ?)";
+    public void save(String agentName,double cpu, double memory) {
+        String sql = "INSERT INTO system_metrics (agent_name,cpu_usage, memory_usage) VALUES (?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(URL, USER, PW);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setDouble(1, cpu);
-            pstmt.setDouble(2, memory);
+            pstmt.setString(1, agentName);
+            pstmt.setDouble(2, cpu);
+            pstmt.setDouble(3, memory);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -42,6 +43,7 @@ public class DatabaseRepository {
            while(rs.next()) {
                metrics.add(new Metric(
                     rs.getInt("id"),
+                    rs.getString("agent_name"),
                     rs.getDouble("cpu_usage"),
                     rs.getDouble("memory_usage"),
                     rs.getTimestamp("recorded_at").toString()

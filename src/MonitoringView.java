@@ -51,8 +51,7 @@ public class MonitoringView {
         sb.append("  <canvas id='myChart' height='100'></canvas>");
         sb.append("</div>");
 
-        sb.append("<table><tr><th>ID</th><th>CPU 사용률</th><th>메모리 사용률</th><th>기록 시간</th></tr>");
-
+        sb.append("<table><tr><th>ID</th><th>서버 이름</th><th>CPU 사용률</th><th>메모리 사용률</th><th>기록 시간</th></tr>");
 
 
 
@@ -61,6 +60,7 @@ public class MonitoringView {
             String cpuClass = m.getCpu() >= 80 ? "class='alert'" : "";
             sb.append("<tr>")
                     .append("<td>").append(m.getId()).append("</td>")
+                    .append("<td><strong>").append(m.getAgentName()).append("</strong></td>")
                     .append("<td ").append(cpuClass).append(">").append(String.format("%.1f%%", m.getCpu())).append("</td>")
                     .append("<td>").append(String.format("%.1f%%", m.getMemory())).append("</td>")
                     .append("<td>").append(m.getTimestamp()).append("</td>")

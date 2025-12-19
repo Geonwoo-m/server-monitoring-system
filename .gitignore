@@ -6,6 +6,7 @@ out/
 *.iml
 db.properties
 mysql-connector-j-9.5.0/
+*.jar
 
 ### Eclipse ###
 .apt_generated

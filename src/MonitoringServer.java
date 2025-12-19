@@ -2,6 +2,7 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import org.json.JSONObject;
 
 public class MonitoringServer {
     private static final DatabaseRepository repository = new DatabaseRepository();
@@ -14,11 +15,19 @@ public class MonitoringServer {
             if ("POST".equals(exchange.getRequestMethod())) {
                 String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
 
-                // 데이터 파싱
-                double cpu = Double.parseDouble(body.split("\"cpu\":")[1].split(",")[0].trim());
-                double mem = Double.parseDouble(body.split("\"memory\":")[1].split("}")[0].trim());
 
-                repository.save(cpu, mem); // DB 저장 호출
+                JSONObject jsonPayload = new JSONObject(body);
+
+                String agentName = jsonPayload.getString("agent_name");
+                double cpu = jsonPayload.getDouble("cpu");
+                double memory = jsonPayload.getDouble("memory");
+
+                // [여기 수정 3] 중복 호출 삭제 및 변수명 통일 (agentName, cpu, memory)
+                repository.save(agentName, cpu, memory);
+
+                repository.save(agentName, cpu, memory); // 이름도 함께 저장!
+
+                repository.save(agentName,cpu, memory); // DB 저장 호출
                 exchange.sendResponseHeaders(200, 0);
                 exchange.close();
             }
