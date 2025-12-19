@@ -171,6 +171,7 @@
   "cpu": 24.5,
   "memory": 58.2
 }
+```
 
 ### 실행화면 
 ![웹 페이지 실행 결과](Screenshots/graph.png)
