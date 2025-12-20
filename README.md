@@ -1,6 +1,9 @@
 # server-monitoring-system
 서버 자원 및 네트워크 상태를 실시간으로 모니터링하는 웹 기반 시스템
 
+<details>
+ 
+
 < 2025/12/16 시작 >
 
 ### 프로젝트 배경
@@ -66,7 +69,7 @@
 
 
 <br><br>
-
+</details>
 <span style="color:red; font-size:30px">위에 작업한 내용 삭제하고 다시 작업 </span>
 
 **Python과 Java를 결합하여 작동하게 변경**
