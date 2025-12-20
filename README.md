@@ -230,9 +230,9 @@
 ### 실행화면 (UI 및 아키텍처 개선 결과)
 ![최종 대시보드 구조](Screenshots/1220_UI.png)
 
-![텔레그램 화면]
+
 <p align="center">
-  <img src="Screenshots/telegram.png" width="350">
+  <img src="Screenshots/telegram.png" width="350" alt="텔레그램 알림 화면">
 </p>
 
 
