@@ -227,12 +227,12 @@
 2. **연결 유실**: `🚨 [경고] 에이전트 연결이 끊어졌습니다! (데이터 수집 중단)`
 3. **과부하 발생**: `⚠️ [과부하] CPU 사용량 급증! (CPU: 85.4%, MEM: 60.2%)`
 
-### 실행화면 (UI 및 아키텍처 개선 결과)
+### 실행화면 및 텔레그램 화면 (UI 및 아키텍처 개선 결과)
 ![최종 대시보드 구조](Screenshots/1220_UI.png)
 
 
 <p align="center">
-  <img src="Screenshots/telegram.png" width="350" alt="텔레그램 알림 화면">
+  <img src="Screenshots/telegram.png" width="350" >
 </p>
 
 
