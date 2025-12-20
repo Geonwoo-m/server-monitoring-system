@@ -1,0 +1,5 @@
+body { background-color: #f1f3f5; font-family: 'Pretendard', sans-serif; }
+.card { border: none; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+.btn-group .btn { min-width: 80px; font-weight: 600; }
+.peak-label { font-size: 0.9rem; color: #6c757d; }
+.peak-value { font-size: 1.5rem; color: #d63384; font-weight: 800; }
