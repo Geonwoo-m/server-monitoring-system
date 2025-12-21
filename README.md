@@ -241,6 +241,10 @@
   <img src="Screenshots/telegram.png" width="350" >
 </p>
 
+> **2025/12/20 진행 기록**
+>
+> Telegram TOKEN, ID 암호화
+> 키값 불일치로 인해 Unknown-Agent로 저장되던 현상을 수정하여, 각 서버(Agent)의 이름이 DB에 정확히 기록되도록 수정
 
 
 
