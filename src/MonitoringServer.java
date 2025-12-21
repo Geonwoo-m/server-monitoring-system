@@ -45,8 +45,10 @@ public class MonitoringServer {
                     double cpu = json.getDouble("cpu");
                     double mem = json.getDouble("mem");
 
+                    String agentName = json.optString("agent_name", "Unknown-Agent");
+
                     // DB 저장
-                    repository.saveMetric(cpu, mem);
+                    repository.saveMetric(cpu, mem, agentName);
 
                     // CPU가 80% 이상일 때 알림 (조건은 원하는 대로 수정 가능)
                     if (cpu >= 80.0) {

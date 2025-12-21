@@ -1,16 +1,30 @@
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 
 public class TelegramService {
-    // 1단계에서 받은 토큰
-    private static final String TOKEN = "8430847609:AAFgz3xGocv50RcKQDwdI3JrnyVyrXqEGbg";
-    // 2단계에서 받은 숫자 ID
-    private static final String CHAT_ID = "8584125048";
+    private static final Properties prop =  new Properties();
+
+    static{
+
+        try(FileInputStream fis = new FileInputStream("config.properties")){
+                prop.load(fis);
+        }catch(IOException e){
+            System.out.println("설정 파일을 찾을 수 없습니다: config.properties");
+            e.printStackTrace();
+        }
+    }
+    private static final String TOKEN = prop.getProperty("telegram.token");
+    private static final String CHAT_ID = prop.getProperty("telegram.chat_id");
 
     public static void sendMessage(String text) {
-        // 서버 성능에 영향을 주지 않도록 별도 스레드(비동기)로 발송
+
+        if (TOKEN == null || CHAT_ID == null) return;
+
         new Thread(() -> {
             try {
                 String urlString = "https://api.telegram.org/bot" + TOKEN + "/sendMessage";

@@ -9,10 +9,10 @@ import java.util.Collections;
 public class DatabaseRepository {
     private static final Properties prop = new Properties();
     static {
-        try (FileInputStream fis = new FileInputStream("db.properties")) {
+        try (FileInputStream fis = new FileInputStream("config.properties")) {
             prop.load(fis);
         } catch (IOException e) {
-            System.err.println("설정 파일을 찾을 수 없습니다: db.properties");
+            System.err.println("설정 파일을 찾을 수 없습니다: config.properties");
             e.printStackTrace();
         }
     }
@@ -66,12 +66,13 @@ public class DatabaseRepository {
         return list;
     }
 
-    public void saveMetric(double cpu, double mem) {
-        String sql = "INSERT INTO system_metrics (cpu_usage, memory_usage, recorded_at) VALUES (?, ?, CURRENT_TIMESTAMP)";
+    public void saveMetric(double cpu, double mem, String agentName) {
+        String sql = "INSERT INTO system_metrics (cpu_usage, memory_usage, agent_name) VALUES (?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(URL, USER, PW);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setDouble(1, cpu);
             pstmt.setDouble(2, mem);
+            pstmt.setString(3, agentName);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("❌ DB 저장 오류: " + e.getMessage());
