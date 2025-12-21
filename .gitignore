@@ -7,7 +7,7 @@ out/
 config.properties
 mysql-connector-j-9.5.0/
 *.jar
-
+*.py
 ### Eclipse ###
 .apt_generated
 .classpath
