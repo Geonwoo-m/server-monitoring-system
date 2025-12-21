@@ -245,8 +245,8 @@
 
 ## ✨ 주요 업데이트 및 개선 사항
 
- 1.Telegram TOKEN, ID 암호화
- 2.키값 불일치로 인해 Unknown-Agent로 저장되던 현상을 수정하여, 각 서버(Agent)의 이름이 DB에 정확히 기록되도록 수정
+ * Telegram TOKEN, ID 암호화
+ * 키값 불일치로 인해 Unknown-Agent로 저장되던 현상을 수정하여, 각 서버(Agent)의 이름이 DB에 정확히 기록되도록 수정
 
 
 
