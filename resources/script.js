@@ -1,6 +1,7 @@
 let myChart;
 let currentUnit = 1;
 
+// [단위 설정] 버튼 클릭 시 호출, 서버에 요청할 unit 파라미터 계산
 function setUnit(btn, unitValue) {
     document.querySelectorAll('#unit-selector .btn').forEach(b => {
         b.classList.remove('btn-dark', 'active');
@@ -19,7 +20,7 @@ function setUnit(btn, unitValue) {
     }
     fetchData();
 }
-
+// [API 통신] MonitoringServer의 /api/history 엔드포인트에서 데이터를 가져옴
 function fetchData() {
     fetch(`/api/history?range=15&unit=${currentUnit}`)
         .then(res => res.json())
@@ -29,7 +30,7 @@ function fetchData() {
         })
         .catch(err => console.error("데이터 로드 실패:", err));
 }
-
+// [차트 렌더링] 서버에서 받은 MetricSummary 리스트를 Chart.js 데이터셋으로 변환
 function renderChart(serverData) {
     if (!serverData || serverData.length === 0) return;
 
@@ -124,7 +125,7 @@ function renderChart(serverData) {
         myChart.update('none');
     }
 }
-
+// [상태 업데이트] 서버가 알려준 lastSeen(초) 값에 따라 연결 상태 표시등 제어
 function updateStatusDot(lastSeen) {
     const dot = document.getElementById('status-dot');
     if (!dot) return;
@@ -133,6 +134,6 @@ function updateStatusDot(lastSeen) {
     else dot.style.backgroundColor = '#bbb';
 }
 
-// 1초마다 갱신
+// 1초마다 자동으로 fetchData를 실행하여 실시간성 유지
 setInterval(fetchData, 1000);
 fetchData();

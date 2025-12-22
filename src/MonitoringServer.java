@@ -13,23 +13,30 @@ public class MonitoringServer {
     public static void main(String[] args) throws Exception {
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
 
-        // [기능 1] 연결 상태 감시 스레드 (연결됨/끊김 알림)
+        //텔레그램 연동
         new Thread(() -> {
             boolean isConnected = false;
+            boolean isFirstCheck = true;
             while (true) {
                 try {
                     Thread.sleep(5000); // 5초마다 체크
                     long lastSeen = repository.getLastDataSecondsAgo();
 
+                    if(isFirstCheck && lastSeen<15){
+                        isConnected = true;
+                        isFirstCheck = false;
+                        TelegramService.sendMessage("✅ [시작] 서버가 가동되었으며 에이전트와 첫 연결에 성공했습니다.");
+
+                    }
                     // 데이터가 15초 이내에 들어왔는데, 이전에 끊김 상태였다면? -> 연결됨!
                     if (lastSeen < 15 && !isConnected) {
                         isConnected = true;
-                        TelegramService.sendMessage("✅ [알림] 에이전트가 서버에 연결되었습니다.");
+                        TelegramService.sendMessage("✅ [복구] 에이전트가 다시 연결되었습니다.");
                     }
                     // 데이터가 30초 이상 안 들어오는데, 이전에 연결 상태였다면? -> 끊김!
                     else if (lastSeen >= 30 && isConnected) {
                         isConnected = false;
-                        TelegramService.sendMessage("🚨 [경고] 에이전트 연결이 끊어졌습니다! (데이터 수집 중단)");
+                        TelegramService.sendMessage("🚨 [경고] 에이전트 연결이 끊어졌습니다");
                     }
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -120,17 +127,26 @@ public class MonitoringServer {
             exchange.getResponseBody().close();
         });
 
-        // 웹 페이지 서빙
+        // 브라우저의 요청에따라 HTML/CSS 등 정적 파일을 응답
         server.createContext("/", exchange -> {
+            // 요청된 URI에서 경로(Path)만 추출 (예: /monitoring.html)
             String path = exchange.getRequestURI().getPath();
-            if (path.equals("/") || path.equals("/index.html")) path = "/monitoring.html";
+            // 2. 기본 경로(/)로 접속 시, 메인 페이지인 monitoring.html로 자동 연결
+            if (path.equals("/")) path = "/monitoring.html";
+            // 3. resources 폴더 내의 실제 파일 객체 생성
             File file = new File("resources" + path);
             if (file.exists()) {
+                // 파일을 바이트 배열로 변환 (NIO.2의 Path 객체를 활용해 효율적으로 읽음)
                 byte[] response = Files.readAllBytes(file.toPath());
+                // HTML 파일인 경우, 브라우저가 한글을 깨뜨리지 않도록 응답 헤더(MIME 타입) 설정
                 if (path.endsWith(".html")) exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
+                // 응답 헤더 전송: 상태 코드 200(성공)과 데이터 크기(length)를 먼저 보냄
                 exchange.sendResponseHeaders(200, response.length);
+                // 응답 바디 전송: 실제 바이트 데이터를 네트워크를 통해 전송
                 exchange.getResponseBody().write(response);
+                // 파일이 없는 경우 404(Not Found) 에러 응답
             } else { exchange.sendResponseHeaders(404, 0); }
+            // 스트림 종료 및 사용한 자원 반납
             exchange.getResponseBody().close();
         });
 

@@ -7,6 +7,7 @@ import java.util.Properties;
 import java.util.Collections;
 
 public class DatabaseRepository {
+    // 1. Properties: 외부 설정 파일(.properties)의 '키=값' 데이터를 담는 보관함 *Hashtable 상속받아서 만들어짐
     private static final Properties prop = new Properties();
     static {
         try (FileInputStream fis = new FileInputStream("config.properties")) {
